@@ -1,13 +1,13 @@
-package com.example.cryptoapp
+package com.example.cryptoapp.presentation
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.cryptoapp.api.ApiFactory
-import com.example.cryptoapp.database.AppDatabase
-import com.example.cryptoapp.pojo.CoinPriceInfo
-import com.example.cryptoapp.pojo.CoinPriceInfoRowData
+import com.example.cryptoapp.data.network.ApiFactory
+import com.example.cryptoapp.data.database.AppDatabase
+import com.example.cryptoapp.data.model.CoinPriceInfo
+import com.example.cryptoapp.data.model.CoinPriceInfoRowData
 import com.google.gson.Gson
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +31,7 @@ class CoinViewModel(application: Application): AndroidViewModel(application) {
 
     private fun loadData(){
         val disposable = ApiFactory.apiService.getTopCoinsInfo(limit = 50)
-            .map {it.data?.map { it?.coinInfo?.name }?.joinToString(",") }
+            .map {it.coinNameContainers?.map { it?.coinName?.name }?.joinToString(",") }
             .flatMap { ApiFactory.apiService.getFullPriceList(fromSyms = it) }
             .map { getPriceListFromRawData(it) }
             .delaySubscription(10, TimeUnit.SECONDS)
