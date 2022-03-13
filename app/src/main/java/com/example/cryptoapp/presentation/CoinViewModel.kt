@@ -6,8 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.cryptoapp.data.network.ApiFactory
 import com.example.cryptoapp.data.database.AppDatabase
-import com.example.cryptoapp.data.model.CoinPriceInfo
-import com.example.cryptoapp.data.model.CoinPriceInfoRowData
+import com.example.cryptoapp.data.network.model.CoinInfoDto
+import com.example.cryptoapp.data.network.model.CoinInfoJsonContainerDto
 import com.google.gson.Gson
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -21,7 +21,7 @@ class CoinViewModel(application: Application): AndroidViewModel(application) {
 
     val priceList = db.coinPriceInfoDao().getPriceList()
 
-    fun getDetailInfo(fSym: String) : LiveData<CoinPriceInfo>{
+    fun getDetailInfo(fSym: String) : LiveData<CoinInfoDto>{
         return db.coinPriceInfoDao().getPriceInfoAboutCoin(fSym)
     }
 
@@ -51,10 +51,10 @@ class CoinViewModel(application: Application): AndroidViewModel(application) {
     }
 
      private fun getPriceListFromRawData(
-         coinPriceInfoRowData: CoinPriceInfoRowData
-     ): List<CoinPriceInfo>? {
-         val result = ArrayList<CoinPriceInfo>()
-         val jsonObject = coinPriceInfoRowData.coinPriceInfoJsonObject ?: return null
+         coinInfoJsonContainerDto: CoinInfoJsonContainerDto
+     ): List<CoinInfoDto>? {
+         val result = ArrayList<CoinInfoDto>()
+         val jsonObject = coinInfoJsonContainerDto.json ?: return null
          val coinKeySet = jsonObject.keySet()
          for (coinKey in coinKeySet) {
              val currencyJson = jsonObject.getAsJsonObject(coinKey)
@@ -62,7 +62,7 @@ class CoinViewModel(application: Application): AndroidViewModel(application) {
              for (currencyKey in currencyKeySet){
                  val priceInfo = Gson().fromJson(
                      currencyJson.getAsJsonObject(currencyKey),
-                     CoinPriceInfo::class.java
+                     CoinInfoDto::class.java
                  )
                  result.add(priceInfo)
              }
