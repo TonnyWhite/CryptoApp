@@ -2,12 +2,8 @@ package com.example.cryptoapp.data.network.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.cryptoapp.data.network.ApiFactory.BASE_IMAGE_URL
-import com.example.cryptoapp.utils.convertTimestampToTime
 import com.google.gson.annotations.Expose
-
 import com.google.gson.annotations.SerializedName
-
 
 
 @Entity(tableName= "full_price_list")
@@ -34,7 +30,7 @@ data class CoinInfoDto (
     val flags: String? = null,
     @SerializedName("PRICE")
     @Expose
-    val price: Double? = null,
+    val price: String? = null,
     @SerializedName("LASTUPDATE")
     @Expose
     val lastUpdate: Long? = null,
@@ -73,11 +69,11 @@ data class CoinInfoDto (
 
     @SerializedName("HIGHDAY")
     @Expose
-    val highDay: Double? = null,
+    val highDay: String? = null,
 
     @SerializedName("LOWDAY")
     @Expose
-    val lowDay: Double? = null,
+    val lowDay: String? = null,
 
     @SerializedName("OPEN24HOUR")
     @Expose
@@ -194,13 +190,4 @@ data class CoinInfoDto (
     @SerializedName("IMAGEURL")
     @Expose
     val imageUrl: String? = null,
-    ){
-
-    fun getFormattedTime(): String{
-      return convertTimestampToTime(lastUpdate)
-    }
-
-    fun getFullImageUrl(): String{
-       return BASE_IMAGE_URL + imageUrl
-    }
-}
+    )

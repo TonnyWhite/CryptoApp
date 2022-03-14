@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cryptoapp.R
-import com.example.cryptoapp.data.network.model.CoinInfoDto
+import com.example.cryptoapp.domain.CoinInfo
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_coin_info.view.*
 
 class CoinInfoAdapter(private val context: Context): RecyclerView.Adapter<CoinInfoAdapter.CoinInfoViewHolder>() {
-    var coinInfoDtoList: List<CoinInfoDto> = listOf()
+    var coinInfoList: List<CoinInfo> = listOf()
     set(value){
         field = value
         notifyDataSetChanged()
@@ -25,15 +25,15 @@ class CoinInfoAdapter(private val context: Context): RecyclerView.Adapter<CoinIn
     }
 
     override fun onBindViewHolder(holder: CoinInfoViewHolder, position: Int) {
-       val coin = coinInfoDtoList[position]
+       val coin = coinInfoList[position]
         with(holder) {
             with(coin) {
                 val symbolsTemplate = context.resources.getString(R.string.symbols_template)
                 val lastUpdateTemplate = context.resources.getString(R.string.last_update_template)
                 tvSymbols.text = String.format(symbolsTemplate, fromSymbol, toSymbol)
                 tvPrice.text = price.toString()
-                tvUpdateDate.text = String.format(lastUpdateTemplate, getFormattedTime())
-                Picasso.get().load(getFullImageUrl()).into(ivLogoCoin)
+                tvUpdateDate.text = String.format(lastUpdateTemplate, lastUpdate)
+                Picasso.get().load(imageUrl).into(ivLogoCoin)
                 itemView.setOnClickListener{
                     onCoinClickListener?.onCoinClick(this)
                 }
@@ -42,7 +42,7 @@ class CoinInfoAdapter(private val context: Context): RecyclerView.Adapter<CoinIn
 
     }
 
-    override fun getItemCount() = coinInfoDtoList.size
+    override fun getItemCount() = coinInfoList.size
 
 
     inner class CoinInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -54,7 +54,7 @@ class CoinInfoAdapter(private val context: Context): RecyclerView.Adapter<CoinIn
 
 
     interface OnCoinClickListener{
-        fun onCoinClick(coinPriceInfoDto: CoinInfoDto)
+        fun onCoinClick(coinPriceInfo: CoinInfo)
     }
 
 }
