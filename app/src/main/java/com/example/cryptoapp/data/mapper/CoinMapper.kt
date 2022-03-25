@@ -10,8 +10,12 @@ import java.sql.Date
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import kotlin.Comparator
 
-class CoinMapper {
+
+
+class CoinMapper @Inject constructor() {
 
     fun mapDtoToDbModel(dto: CoinInfoDto) = CoinInfoDbModel(
         fromSymbol = dto.fromSymbol,
